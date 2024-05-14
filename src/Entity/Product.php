@@ -4,9 +4,10 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-class Product
+class Product implements Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,6 +26,11 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'products', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    public function __toString(): string
+    {
+        return $this->name . '-' . $this->price . '€';
+    }
 
     public function getId(): ?int
     {
