@@ -2,28 +2,36 @@
 
 namespace App\Entity;
 
+use App\LifecycleEventTrait\EntityDateTrait;
 use App\Repository\CommentRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Stringable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment implements Stringable
 {
+    use EntityDateTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Email()]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
@@ -37,11 +45,8 @@ class Comment implements Stringable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoFilename = null;
 
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void 
-    {
-        $this->createdAt = new DateTimeImmutable();
-    }
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __toString(): string
     {
@@ -121,6 +126,18 @@ class Comment implements Stringable
     public function setPhotoFilename(?string $photoFilename): static
     {
         $this->photoFilename = $photoFilename;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

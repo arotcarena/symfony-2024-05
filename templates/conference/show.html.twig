@@ -2,10 +2,18 @@
 {% block title %}Conference Guestbook - {{ conference }}{% endblock %}
 {% block body %}
   <h2>{{ conference }} Conference</h2>
+
+  <div class="form-container">
+    <h2>Add your own feedback</h2>
+
+    {{ form(comment_form) }}
+  </div>
+  
+
   {% if comments|length > 0 %}
     {% for comment in comments %}
         {% if comment.photofilename %}
-            <img src="{{ asset('uploads/photos/' ~ comment.photofilename) }}" />
+            <img src="{{ asset('uploads/photos/' ~ comment.photofilename) }}" height="80px" width="auto" />
         {% endif %}
         <h4>{{ comment.author }}</h4>
         <small>{{ comment.createdAt|format_datetime('medium', 'short') }}</small>

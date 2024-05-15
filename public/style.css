@@ -1,0 +1,63 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #FFF!important;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0 20px;
+}
+
+.form-container {
+    margin: 40px 0;
+    padding: 15px 25px;
+    background-color: lightgrey;
+    max-width: 400px;
+    border-radius: 8px;
+}
+
+form div {
+    margin: 20px 0;
+}
+
+button {
+    background-color: rgb(83, 83, 136);
+    color: #FFF;
+    border-radius: 5px;
+    height: 40px;
+    padding: 0 25px;
+    border: none;
+    outline: none;
+}
+
+button:hover {
+    background-color: rgb(53, 53, 85);
+}
+
+input, textarea {
+    display: block;
+    width: 100%;
+    height: 40px;
+    border: solid 1px lightgray;
+    outline: none;
+    font-size: 1em;
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+label {
+    margin-bottom: 10px;
+    display: block;
+}
+
+input:focus {
+    border: solid 1px lightgray;
+    outline: solid 3px lightblue;
+}
