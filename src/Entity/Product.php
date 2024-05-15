@@ -29,7 +29,7 @@ class Product implements Stringable
 
     public function __toString(): string
     {
-        return $this->name . '-' . $this->price . '€';
+        return $this->name . ' - ' . $this->price . '€';
     }
 
     public function getId(): ?int

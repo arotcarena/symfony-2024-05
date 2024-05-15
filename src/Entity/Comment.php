@@ -6,8 +6,10 @@ use App\Repository\CommentRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Stringable;
 
+#[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment implements Stringable
 {
@@ -35,7 +37,8 @@ class Comment implements Stringable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoFilename = null;
 
-    public function __construct()
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void 
     {
         $this->createdAt = new DateTimeImmutable();
     }
