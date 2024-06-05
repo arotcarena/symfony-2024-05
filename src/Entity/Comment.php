@@ -57,6 +57,15 @@ class Comment implements Stringable
         return (string) $this->getEmail();
     }
 
+    public function getStateAsString(): string
+    {
+        return $this->state->value;
+    }
+    public function setStateAsString(string $state): void
+    {
+        $this->state = CommentStateEnum::from($state);
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -67,7 +67,13 @@ class ConferenceController extends AbstractController
             $this->em->persist($comment);
             $this->em->flush();
 
-            $this->bus->dispatch(new CommentMessage($comment->getId(), []));
+            $context = [
+                'user_ip' => $request->getClientIp(),
+                'user_agent' => $request->headers->get('user-agent'),
+                'referrer' => $request->headers->get('referer'),
+                'permalink' => $request->getUri(),
+            ];
+            $this->bus->dispatch(new CommentMessage($comment->getId(), $context));
 
             return $this->redirectToRoute('conference_show', [
                 'slug' => $conference->getSlug()
