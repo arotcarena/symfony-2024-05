@@ -58,5 +58,6 @@ class CommentCrudController extends AbstractCrudController
                 'widget' => 'single_text',
             ]);
         yield $createdAt->onlyOnIndex();
+        yield TextField::new('state');
     }
 }

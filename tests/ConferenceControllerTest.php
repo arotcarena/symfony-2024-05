@@ -2,6 +2,9 @@
 
 namespace App\Tests;
 
+use App\Entity\Enum\CommentStateEnum;
+use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -39,11 +42,17 @@ class ConferenceControllerTest extends WebTestCase
         $this->client->submitForm('Submit', [
             'comment[author]' => 'Fabien',
             'comment[text]' => 'Some feedback from an automated functional test',
-            'comment[email]' => 'me@automat.ed',
+            'comment_form[email]' => $email = 'me@automat.ed',
             'comment[photo]' => dirname(__DIR__, 2).'/public/images/under-construction.gif',
         ]);
         static::assertResponseRedirects();
+
+        // simulate comment validation
+        $comment = static::getContainer()->get(CommentRepository::class)->findOneByEmail($email);
+        $comment->setState(CommentStateEnum::Published);
+        static::getContainer()->get(EntityManagerInterface::class)->flush();
+
         $this->client->followRedirect();
-        static::assertSelectorExists('div:contains("There are 2 comments")');
+        static::assertSelectorExists('div:contains("There are 3 comments")');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Conference;
 use App\Form\CommentType;
+use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -21,7 +23,8 @@ class ConferenceController extends AbstractController
     public function __construct(
         private ConferenceRepository $conferenceRepository,
         private CommentRepository $commentRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private MessageBusInterface $bus
     )
     {
         
@@ -63,6 +66,9 @@ class ConferenceController extends AbstractController
 
             $this->em->persist($comment);
             $this->em->flush();
+
+            $this->bus->dispatch(new CommentMessage($comment->getId(), []));
+
             return $this->redirectToRoute('conference_show', [
                 'slug' => $conference->getSlug()
             ]);

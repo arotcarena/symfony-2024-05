@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Enum\CommentStateEnum;
 use App\LifecycleEventTrait\EntityDateTrait;
 use App\Repository\CommentRepository;
 use DateTimeImmutable;
@@ -47,6 +48,9 @@ class Comment implements Stringable
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(length: 255, nullable: true, options: ['default' => CommentStateEnum::Submitted->value])]
+    private ?CommentStateEnum $state = CommentStateEnum::Submitted;
 
     public function __toString(): string
     {
@@ -138,6 +142,18 @@ class Comment implements Stringable
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getState(): ?CommentStateEnum
+    {
+        return $this->state;
+    }
+
+    public function setState(?CommentStateEnum $state): static
+    {
+        $this->state = $state;
 
         return $this;
     }
